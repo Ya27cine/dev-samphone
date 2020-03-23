@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Entity;
+use Cocur\Slugify\Slugify;
 
+
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Produit
 {
+ 
+    function __construct()
+    {
+        $this->created_at = new DateTime();
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,6 +34,26 @@ class Produit
      * @ORM\Column(type="text", nullable=true)
      */
     private $descri;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $prix;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantitie;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $solde;
 
     public function getId(): ?int
     {
@@ -43,6 +72,10 @@ class Produit
         return $this;
     }
 
+    public function getSlug(): string{
+       return (new Slugify())->slugify($this->titre); // hello-world
+    }
+
     public function getDescri(): ?string
     {
         return $this->descri;
@@ -51,6 +84,58 @@ class Produit
     public function setDescri(?string $descri): self
     {
         $this->descri = $descri;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(int $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getFormattedPrix() : string {
+        return number_format($this->prix,0, '', ' ');
+    }
+
+    public function getQuantitie(): ?int
+    {
+        return $this->quantitie;
+    }
+
+    public function setQuantitie(int $quantitie): self
+    {
+        $this->quantitie = $quantitie;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getSolde(): ?bool
+    {
+        return $this->solde;
+    }
+
+    public function setSolde(bool $solde): self
+    {
+        $this->solde = $solde;
 
         return $this;
     }

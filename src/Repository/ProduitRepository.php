@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,42 @@ class ProduitRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Produit::class);
     }
+
+
+    /**
+      * @return Produits
+      */
+
+    public function findAllPasCher(): array{
+        return $this->findVisibleQuery()
+            ->where('p.prix  < 150')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * @return Produits[]
+     */
+    public function findLatest() : array{
+        return $this->findVisibleQuery()
+        ->setMaxResults(4)
+        ->getQuery()
+        ->getResult();
+    }
+
+    private function findVisibleQuery(): QueryBuilder{
+        return $this->createQueryBuilder('p')
+            ->where('p.solde = false');
+    }
+
+
+
+
+
+
+
+
 
     // /**
     //  * @return Produit[] Returns an array of Produit objects
@@ -47,4 +84,5 @@ class ProduitRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }
