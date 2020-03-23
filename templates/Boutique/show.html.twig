@@ -4,7 +4,56 @@
 
 
 {% block body %}
+   <div class="jumbotron">
+      <div class="container mt-4">
+         <div class="row">
+            <div class="col-md-8">
+
+            </div>
+            <div class="col-md-4">
+               <h1> {{ produit.titre }}</h1>
+               <h3> {{ produit.quantitie }} pieces</h3>
+               <div class="text-primary" style="font-size: 4rem; font-weight: bold">
+                  {{ produit.formattedPrix }} €
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
    <div class="container mt-4">
-       {{ produit.titre }}
+      <p> {{ produit.descri }}</p>
+
+      <div class="row">
+         <div class="col-md-8">
+            <h3> CARACTÉRISTIQUES TECHNIQUES </h3>
+            <table class="table table-striped">
+               <tr>
+                  <td>Système</td>
+                  <td>Android</td>
+               </tr>
+               <tr>
+                  <td>Mémoire vive (RAM)</td>
+                  <td>3 GO</td>
+               </tr>
+               <tr>
+                  <td>Capacité</td>
+                  <td>32 GO</td>
+               </tr>
+               <tr>
+                  <td>Type de cartes supportées</td>
+                  <td>microSD, microSDHC, microSDXC</td>
+               </tr>
+               <tr>
+                  <td>Double SIM</td>
+                  <td>Oui</td>
+               </tr>
+            </table>
+         </div>
+         <div class="col-md-4">
+            <h2>Specificite</h2>
+         </div>
+      </div>
    </div>
 {% endblock %}
+
