@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 use Cocur\Slugify\Slugify;
-
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProduitRepository")
+ * @UniqueEntity("titre")
  */
 class Produit
 {
- 
     function __construct()
     {
         $this->created_at = new DateTime();
@@ -27,9 +27,10 @@ class Produit
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min=7, max=50)
      */
     private $titre;
-
+         
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -37,6 +38,7 @@ class Produit
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(max=1000, min=45)
      */
     private $prix;
 

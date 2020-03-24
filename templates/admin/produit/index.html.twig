@@ -6,6 +6,9 @@
 
     <div class="container mt-4">
         <h2>Gerer les produits</h2>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success"> {{ message }}</div>
+        {% endfor %}
         <table class="table table-striped">
             <thead>
             <tr>
@@ -21,6 +24,13 @@
                             <a href="{{path('admin.produit.edit', {id: produit.id})}}" class="btn btn-secondary">
                                 Editer
                             </a>
+                            <form method="post" action="{{ path('admin.produit.delete', {id: produit.id}) }}" 
+                                  style="display: inline-block" onsubmit=" return confirm('Etes-vous vraiment sur ?')">
+
+                                <input  type="hidden" name="_method" value="DELETE">
+                                <input  type="hidden"  name="token"   value="{{ csrf_token('del') ~ produit.id }}">
+                                <button class="btn btn-danger">Supprime</button>
+                            </form>
                         </td>
                     </tr>
                  {% endfor %}

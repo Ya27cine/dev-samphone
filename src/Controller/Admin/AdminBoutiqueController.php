@@ -50,6 +50,7 @@ class AdminBoutiqueController extends AbstractController {
         if($form->isSubmitted() && $form->isValid()){
             $this->em->persist($produit);
             $this->em->flush();
+            $this->addFlash('success', 'Bien ajouté avec succes');
             return $this->redirectToRoute("admin.produit.index");
         }
 
@@ -59,10 +60,8 @@ class AdminBoutiqueController extends AbstractController {
         ]);
     }
 
-
-
     /**
-     * @Route("/admin/produit/{id}", name="admin.produit.edit")
+     * @Route("/admin/produit/{id}", name="admin.produit.edit", methods="GET|POST")
      */
     public function edit(Produit $produit, Request $request) : Response{
         $form = $this->createForm(ProduitType::class, $produit);
@@ -70,6 +69,7 @@ class AdminBoutiqueController extends AbstractController {
 
         if($form->isSubmitted() && $form->isValid()){
             $this->em->flush();
+            $this->addFlash('success', 'Bien modifié avec succes');
             return $this->redirectToRoute("admin.produit.index");
         }
 
@@ -78,6 +78,25 @@ class AdminBoutiqueController extends AbstractController {
             'form' => $form->createView()
         ]);
     }
+
+
+    
+
+    /**
+     * @Route("/admin/produit/{id}", name="admin.produit.delete", methods="DELETE")
+     */
+    public function delete($id, Produit $produit, Request $request): Response{
+          $submittedToken = $request->request->get('token');
+ 
+        if($this->isCsrfTokenValid('del'.$id, $submittedToken))
+        {
+            $this->em->remove($produit);
+            $this->em->flush();   
+            $this->addFlash('success', 'Bien supprimé avec succes');
+        }
+        return $this->redirectToRoute("admin.produit.index");
+    }
+
 }
 ?>
 
