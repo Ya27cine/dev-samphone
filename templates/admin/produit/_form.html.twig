@@ -1,0 +1,22 @@
+{{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-10">{{ form_row(form.titre) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">{{ form_row(form.descri) }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.prix) }}</div>
+            <div class="col-md-2">{{ form_row(form.solde) }}</div>
+            <div class="col-md-4">{{ form_row(form.quantitie) }}</div>
+        </div>
+
+        {{ form_widget(form) }}
+        <div class="row">
+                <button class="btn btn-primary col-md-10">
+                    {{ button|default('Enregistre')}}
+                </button>
+        </div>
+
+{{ form_end(form) }}
