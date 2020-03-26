@@ -4,9 +4,13 @@ namespace App\Controller;
 
 
 use App\Entity\Produit;
+use App\Entity\ProduitSearch;
+use App\Form\ProduitSearchType;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -34,9 +38,27 @@ class BoutiqueController extends AbstractController {
      * @Route("/produits", name="boutique.index")
      * @return Responsese
      */
-     public function index() : Response{
+     public function index(PaginatorInterface $paginator, Request $request) : Response{
+
+         // create form search :
+         $pd_search = new ProduitSearch();
+         $form = $this->createForm(ProduitSearchType::class, $pd_search);
+         $form->handleRequest($request);
+
+         // get All produit
+         $query = $this->depot->findAllProduitsByQuery($pd_search);
+
+         // gene pagin
+         $produits = $paginator->paginate(
+             $query, /* query NOT result */
+             $request->query->getInt('page', 1), /*page number*/
+             6 /*limit per page*/
+         );
+
         return $this->render("boutique/index.html.twig", [
-            'current_menu' => 'boutique'
+            'current_menu' => 'boutique',
+            'produits'     =>  $produits,
+            'form'         =>  $form->createView()
         ]);
     }
 

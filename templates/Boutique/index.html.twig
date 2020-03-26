@@ -3,10 +3,38 @@
 {% block title 'Boutique' %}
 
 {% block body %}
-<div class="jumbotron text-center">
-    <div class="container">
-        <h1> Nos Produits</h1>
+    <div class="jumbotron">
+        <div class="container">
+            {{ form_start(form) }}
+                <div class="form-row align-items-end">
+                    <div class="col">
+                        {{ form_row(form.maxPrix) }}
+                    </div>
+                    <div class="col">
+                        {{ form_row(form.minQuantitie) }}
+                    </div>
+                   <div class="col">
+                       <div class="form-group">
+                           <button class="btn btn-danger">Rechercher</button>
+                       </div>
+                   </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
     </div>
-</div>
-    
+
+    <div class="container mt-4">
+        <h1> Nos Produits</h1>
+        <div class="row mt-2">
+            {% for produit in produits %}
+                    <div class="col-md-4">
+                            {% include  'boutique/_produit.html.twig'%}
+                    </div>
+            {% endfor %}
+        </div>
+        {# display navigation #}
+        <div class="navigation">
+            {{ knp_pagination_render(produits) }}
+        </div>
+    </div>
 {% endblock %}

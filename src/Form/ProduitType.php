@@ -27,4 +27,5 @@ class ProduitType extends AbstractType
             'translation_domain' => 'forms'
         ]);
     }
+
 }

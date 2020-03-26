@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Produit;
+use App\Entity\ProduitSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -22,14 +24,22 @@ class ProduitRepository extends ServiceEntityRepository
 
 
     /**
-      * @return Produits
+      * @return Query
       */
 
-    public function findAllPasCher(): array{
-        return $this->findVisibleQuery()
-            ->where('p.prix  < 150')
-            ->getQuery()
-            ->getResult();
+    public function findAllProduitsByQuery(ProduitSearch $search): Query{
+        $query = $this->findVisibleQuery();
+        if($search->getMaxPrix()) {
+            $query = $query
+                ->andwhere('p.prix  < :maxP')
+                ->setParameter('maxP', $search->getMaxPrix());
+        }
+        if($search->getMinQuantitie()){
+            $query = $query
+                ->andwhere('p.quantitie  > :minQ')
+                ->setParameter('minQ', $search->getMinQuantitie());
+        }
+        return  $query->getQuery();
     }
 
 
@@ -86,3 +96,4 @@ class ProduitRepository extends ServiceEntityRepository
     */
 
 }
+?>
