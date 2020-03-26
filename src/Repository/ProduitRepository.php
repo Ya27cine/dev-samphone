@@ -39,6 +39,16 @@ class ProduitRepository extends ServiceEntityRepository
                 ->andwhere('p.quantitie  > :minQ')
                 ->setParameter('minQ', $search->getMinQuantitie());
         }
+        if ($search->getOptions()->count() > 0) {
+            $key = 0;
+            foreach ($search->getOptions() as $option){
+            $query = $query
+                ->andWhere(":option$key MEMBER OF p.options")
+                ->setParameter(":option$key", $option);
+             $key++;
+             }
+        }
+
         return  $query->getQuery();
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use DateTime;
@@ -16,6 +18,7 @@ class Produit
     function __construct()
     {
         $this->created_at = new DateTime();
+        $this->options = new ArrayCollection();
     }
 
     /**
@@ -56,6 +59,11 @@ class Produit
      * @ORM\Column(type="boolean")
      */
     private $solde;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Option", inversedBy="produits")
+     */
+    private $options;
 
     public function getId(): ?int
     {
@@ -138,6 +146,34 @@ class Produit
     public function setSolde(bool $solde): self
     {
         $this->solde = $solde;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Option[]
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options[] = $option;
+            $option->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        if ($this->options->contains($option)) {
+            $this->options->removeElement($option);
+            $option->removeProduit($this);
+        }
 
         return $this;
     }

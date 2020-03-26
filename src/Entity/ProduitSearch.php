@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -14,10 +15,22 @@ class ProduitSearch
     private $maxPrix;
 
     /**
+     *@var ArrayCollection
+     */
+    private $options;
+
+    /**
      * @var int|null
 
      */
     private $minQuantitie;
+
+
+
+    public function __construct()
+    {
+        $this->options = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -49,6 +62,22 @@ class ProduitSearch
     public function setMinQuantitie(int $minQuantitie): void
     {
         $this->minQuantitie = $minQuantitie;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOptions(): ArrayCollection
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param ArrayCollection $options
+     */
+    public function setOptions(ArrayCollection $options): void
+    {
+        $this->options = $options;
     }
 
 
