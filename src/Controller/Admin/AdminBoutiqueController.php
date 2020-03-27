@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-
 class AdminBoutiqueController extends AbstractController {
     /**
      * @var ProduitRepository
@@ -64,6 +63,7 @@ class AdminBoutiqueController extends AbstractController {
      * @Route("/admin/produit/{id}", name="admin.produit.edit", methods="GET|POST")
      */
     public function edit(Produit $produit, Request $request) : Response{
+
         $form = $this->createForm(ProduitType::class, $produit);
         $form->handleRequest( $request );
 
