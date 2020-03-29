@@ -3,9 +3,12 @@ namespace App\Controller;
 
 
 
+use App\Entity\Contact;
 use App\Entity\Produit;
 use App\Entity\ProduitSearch;
+use App\Form\ContactType;
 use App\Form\ProduitSearchType;
+use App\Notification\ContactNotif;
 use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -66,7 +69,8 @@ class BoutiqueController extends AbstractController {
      * @Route("/produit/{slug}/{id}", name="boutique.show", requirements={"slug": "[a-z0-9\-]*"})
      * @return Responsese
      */
-    public function show($id, string $slug) : Response{
+    public function show($id, string $slug,Request $request, ContactNotif $notification) : Response{
+        // get item from DB :
         $produit = $this->depot->find($id);
 
         if($produit->getSlug() !== $slug){
@@ -76,9 +80,26 @@ class BoutiqueController extends AbstractController {
             ], 301);
         }
 
+        // prepare zone contat
+        $contact = new Contact();
+        $contact->setProduit($produit);
+        $form_contact = $this->createForm(ContactType::class, $contact);
+        $form_contact->handleRequest($request);
+
+        if($form_contact->isValid() && $form_contact->isSubmitted()){
+            $notification->Notify($contact);
+            $this->addFlash("success", "Votre email a  bien été envoyé");
+           // return $this->redirectToRoute("boutique.show",[
+          //      "id" => $produit->getId(),
+           //     "slug" => $produit->getSlug()
+           // ]);
+        }
+
+
         return $this->render("boutique/show.html.twig", [
             'current_menu' => 'boutique',
             'produit' => $produit,
+            'form_contact' => $form_contact->createView()
         ]);
     }
 
